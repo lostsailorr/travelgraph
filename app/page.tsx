@@ -27,18 +27,18 @@ export default function Home() {
           
           <nav className="hidden lg:flex items-center gap-10">
             <Link href="/plan" className="text-sm font-bold text-neutral-900 border-b-2 border-indigo-600 pb-1">Explore</Link>
-            <Link href="/plan" className="text-sm font-medium text-neutral-600 hover:text-neutral-900 transition-colors">Itinerary</Link>
-            <Link href="/plan" className="text-sm font-medium text-neutral-600 hover:text-neutral-900 transition-colors">Saved Trips</Link>
-            <Link href="/plan" className="text-sm font-medium text-neutral-600 hover:text-neutral-900 transition-colors">About</Link>
+            <Link href="/itinerary" className="text-sm font-medium text-neutral-600 hover:text-neutral-900 transition-colors">Itinerary</Link>
+            <Link href="/saved" className="text-sm font-medium text-neutral-600 hover:text-neutral-900 transition-colors">Saved Trips</Link>
+            <Link href="/about" className="text-sm font-medium text-neutral-600 hover:text-neutral-900 transition-colors">About</Link>
           </nav>
           
           <div className="flex items-center gap-6">
-            <Link href="/plan" className="hidden sm:flex items-center gap-2 text-sm font-medium text-neutral-600 hover:text-neutral-900">
+            <button type="button" className="hidden sm:flex items-center gap-2 text-sm font-medium text-neutral-600 hover:text-neutral-900">
               <Globe className="w-4 h-4" /> English
-            </Link>
-            <Link href="/plan" className="text-neutral-600 hover:text-neutral-900">
+            </button>
+            <button type="button" className="text-neutral-600 hover:text-neutral-900">
               <Heart className="w-5 h-5" />
-            </Link>
+            </button>
             <Link href="/plan" className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-lg font-bold text-sm transition-colors shadow-md shadow-indigo-600/20">
               Get Started
             </Link>
@@ -61,7 +61,7 @@ export default function Home() {
 
         <div className="max-w-[1400px] mx-auto px-8 relative z-10">
           <div className="max-w-2xl">
-            <h1 className="text-6xl sm:text-7xl lg:text-[5.5rem] font-extrabold text-neutral-900 leading-[1.1] tracking-tight mb-6">
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-neutral-900 leading-[1.15] tracking-tight mb-6">
               Travel better<br/>through <span className="text-indigo-600">connections</span>
             </h1>
             <p className="text-xl text-neutral-700 mb-10 max-w-lg leading-relaxed font-medium">
@@ -72,7 +72,7 @@ export default function Home() {
               <Link href="/plan" className="w-full sm:w-auto flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-lg shadow-indigo-600/30 hover:-translate-y-0.5">
                 <Navigation className="w-5 h-5" /> Start Planning <ChevronRight className="w-5 h-5" />
               </Link>
-              <a href="#features" className="w-full sm:w-auto flex items-center justify-center gap-2 bg-white hover:bg-neutral-50 text-neutral-900 px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-md">
+              <a href="#how-it-works" className="w-full sm:w-auto flex items-center justify-center gap-2 bg-white hover:bg-neutral-50 text-neutral-900 px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-md">
                 <Play className="w-5 h-5" /> See How It Works
               </a>
             </div>
@@ -127,6 +127,32 @@ export default function Home() {
                 <p className="text-sm text-neutral-500 leading-relaxed">The more you explore, the better we personalize your trips.</p>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* How it Works Section */}
+      <section id="how-it-works" className="max-w-[1400px] mx-auto px-8 py-20 w-full">
+        <div className="text-center max-w-2xl mx-auto mb-16">
+          <h2 className="text-3xl font-extrabold text-neutral-900 mb-4">How It Works</h2>
+          <p className="text-neutral-500 text-lg">Build the perfect day itinerary in three simple steps.</p>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+          <div className="text-center space-y-4">
+            <div className="w-16 h-16 rounded-2xl bg-indigo-50 flex items-center justify-center mx-auto text-indigo-600 font-extrabold text-2xl shadow-inner border border-indigo-100">1</div>
+            <h3 className="text-xl font-bold text-neutral-900">Pick a Destination</h3>
+            <p className="text-neutral-500">Search for your favorite city from our global list of connected locations.</p>
+          </div>
+          <div className="text-center space-y-4">
+            <div className="w-16 h-16 rounded-2xl bg-indigo-50 flex items-center justify-center mx-auto text-indigo-600 font-extrabold text-2xl shadow-inner border border-indigo-100">2</div>
+            <h3 className="text-xl font-bold text-neutral-900">Select Interests</h3>
+            <p className="text-neutral-500">Choose what you love doing—art, history, food, nature, and more.</p>
+          </div>
+          <div className="text-center space-y-4">
+            <div className="w-16 h-16 rounded-2xl bg-indigo-50 flex items-center justify-center mx-auto text-indigo-600 font-extrabold text-2xl shadow-inner border border-indigo-100">3</div>
+            <h3 className="text-xl font-bold text-neutral-900">Get an Itinerary</h3>
+            <p className="text-neutral-500">Our Graph database instantly computes an optimized geographic path between the best spots.</p>
           </div>
         </div>
       </section>
