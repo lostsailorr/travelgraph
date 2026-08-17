@@ -1,6 +1,6 @@
 import { generateItinerary } from '../../lib/itinerary';
 import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Bookmark } from 'lucide-react';
 import { InteractiveItinerary } from '../../components/InteractiveItinerary';
 
 export default async function ItineraryPage({
@@ -66,9 +66,12 @@ export default async function ItineraryPage({
           <Link href={`/places/${startPlaceId}`} className="flex items-center text-sm font-medium text-neutral-600 hover:text-neutral-900 transition-colors">
             <ArrowLeft className="h-4 w-4 mr-2" /> Back to Place
           </Link>
-          <div className="font-bold text-xl tracking-tight text-neutral-950">
+          <Link href="/" className="font-bold text-xl tracking-tight text-neutral-950 absolute left-1/2 -translate-x-1/2">
             TravelGraph
-          </div>
+          </Link>
+          <Link href="/saved" className="flex items-center text-sm font-medium text-neutral-600 hover:text-indigo-600 transition-colors gap-2">
+            <Bookmark className="w-4 h-4" /> <span className="hidden sm:inline">Saved Trips</span>
+          </Link>
         </div>
       </header>
 

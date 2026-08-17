@@ -1,6 +1,7 @@
 import { getRecommendations } from '../../lib/recommendations';
 import { PlaceCard } from '../../components/PlaceCard';
 import Link from 'next/link';
+import { ArrowLeft, Bookmark } from 'lucide-react';
 
 export default async function RecommendationsPage({
   searchParams,
@@ -26,16 +27,17 @@ export default async function RecommendationsPage({
 
   return (
     <div className="min-h-screen bg-neutral-50 flex flex-col">
-      <header className="border-b border-neutral-200 bg-white px-6 py-4 sticky top-0 z-10">
+      <header className="bg-white border-b border-neutral-200 px-6 py-4 sticky top-0 z-10">
         <div className="mx-auto max-w-7xl flex items-center justify-between">
-          <Link href="/" className="font-bold text-xl tracking-tight text-neutral-950">
+          <Link href="/plan" className="flex items-center text-sm font-medium text-neutral-600 hover:text-neutral-900 transition-colors">
+            <ArrowLeft className="h-4 w-4 mr-2" /> Back to Search
+          </Link>
+          <Link href="/" className="font-bold text-xl tracking-tight text-neutral-950 absolute left-1/2 -translate-x-1/2">
             TravelGraph
           </Link>
-          <div className="flex gap-4">
-            <Link href="/plan" className="text-sm font-medium text-neutral-600 hover:text-neutral-900 bg-neutral-100 px-4 py-2 rounded-full transition-colors">
-              Adjust Interests
-            </Link>
-          </div>
+          <Link href="/saved" className="flex items-center text-sm font-medium text-neutral-600 hover:text-indigo-600 transition-colors gap-2">
+            <Bookmark className="w-4 h-4" /> <span className="hidden sm:inline">Saved Trips</span>
+          </Link>
         </div>
       </header>
       

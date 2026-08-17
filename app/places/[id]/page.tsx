@@ -1,6 +1,6 @@
 import { getPlaceDetails } from '../../../lib/recommendations';
 import Link from 'next/link';
-import { MapPin, Clock, Star, ArrowLeft } from 'lucide-react';
+import { MapPin, Clock, Star, ArrowLeft, Bookmark } from 'lucide-react';
 
 export default async function PlaceDetailsPage({
   params,
@@ -69,8 +69,11 @@ export default async function PlaceDetailsPage({
             <Link href="/recommendations" className="flex items-center text-sm font-medium text-white hover:text-neutral-200 transition-colors">
               <ArrowLeft className="h-4 w-4 mr-2" /> Back to results
             </Link>
-            <div className="flex gap-4">
+            <div className="flex items-center gap-4">
                <button className="text-white hover:text-neutral-200"><Star className="h-5 w-5" /></button>
+               <Link href="/saved" className="flex items-center text-sm font-medium text-white hover:text-neutral-200 transition-colors gap-2">
+                 <Bookmark className="w-4 h-4" /> <span className="hidden sm:inline">Saved Trips</span>
+               </Link>
             </div>
           </div>
         </header>
