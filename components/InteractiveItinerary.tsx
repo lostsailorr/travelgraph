@@ -84,7 +84,7 @@ export function InteractiveItinerary({ initialItinerary }: { initialItinerary: a
               {/* Delete Button */}
               <button 
                 onClick={() => removePlace(index)}
-                className="absolute top-2 right-0 p-2 text-neutral-300 hover:text-red-500 hover:bg-red-50 rounded-xl opacity-0 group-hover/item:opacity-100 transition-all focus:opacity-100"
+                className="absolute top-2 right-0 p-2 text-neutral-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all"
                 title="Remove from itinerary"
               >
                 <Trash2 className="w-5 h-5" />
