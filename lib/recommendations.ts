@@ -8,6 +8,14 @@ const readCypher = (filename: string) => {
   return fs.readFileSync(path.join(process.cwd(), 'cypher', filename), 'utf8');
 };
 
+// Safely convert Neo4j values to numbers (handles both native numbers and Neo4j Integers)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const safeNumber = (val: any) => {
+  if (typeof val === 'number') return val;
+  if (val && typeof val.toNumber === 'function') return val.toNumber();
+  return Number(val);
+};
+
 export const getRecommendations = cache(async (cityId: string, interests: string[]) => {
   const driver = getDriver();
   const session = driver.session({ database: 'travelgraph' });
@@ -17,7 +25,7 @@ export const getRecommendations = cache(async (cityId: string, interests: string
     
     return result.records.map(record => {
       const place = record.get('p').properties;
-      const matchedInterests = record.get('matchedInterests').toNumber();
+      const matchedInterests = safeNumber(record.get('matchedInterests'));
       return { ...place, matchedInterests };
     });
   } finally {
@@ -40,7 +48,7 @@ export const getPlaceDetails = cache(async (placeId: string) => {
     const nearbyResult = await session.run(nearbyQuery, { placeId });
     const nearby = nearbyResult.records.map(r => ({
       ...r.get('nearby').properties,
-      distanceMinutes: r.get('distanceMinutes').toNumber()
+      distanceMinutes: safeNumber(r.get('distanceMinutes'))
     }));
 
     // Related places
@@ -48,7 +56,7 @@ export const getPlaceDetails = cache(async (placeId: string) => {
     const relatedResult = await session.run(relatedQuery, { placeId });
     const related = relatedResult.records.map(r => ({
       ...r.get('related').properties,
-      sharedInterests: r.get('sharedInterests').toNumber()
+      sharedInterests: safeNumber(r.get('sharedInterests'))
     }));
 
     // Interests tags
@@ -70,7 +78,7 @@ export const getItineraryCandidates = cache(async (startPlaceId: string, minimum
     const result = await session.run(query, { startPlaceId, minimumRating });
     return result.records.map(r => ({
       ...r.get('next').properties,
-      travelTime: r.get('travelTime').toNumber()
+      travelTime: safeNumber(r.get('travelTime'))
     }));
   } finally {
     await session.close();

@@ -39,10 +39,10 @@ export default async function RecommendationsPage({
         </div>
       </header>
       
-      <main className="flex-1 mx-auto max-w-7xl w-full px-6 py-12">
-        <div className="mb-10">
-          <h1 className="text-3xl font-bold text-neutral-900 mb-2">Recommended for You</h1>
-          <p className="text-neutral-500">Based on your interests in {interests.join(', ')}</p>
+      <main className="flex-1 mx-auto max-w-4xl w-full px-6 py-12">
+        <div className="mb-8">
+          <h1 className="text-4xl font-extrabold text-neutral-900 mb-2">Recommended for You</h1>
+          <p className="text-neutral-500 text-lg">Top picks based on your interests: {interests.join(', ')}</p>
         </div>
 
         {errorState ? (
@@ -69,7 +69,7 @@ export default async function RecommendationsPage({
             </Link>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="flex flex-col gap-6">
             {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
             {recommendations.map((place: any) => (
               <PlaceCard
@@ -80,6 +80,7 @@ export default async function RecommendationsPage({
                 description={place.description}
                 matchedInterests={place.matchedInterests}
                 duration={duration}
+                tags={place.interests}
               />
             ))}
           </div>

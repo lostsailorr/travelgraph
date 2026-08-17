@@ -17,8 +17,8 @@ async function seed() {
     await session.run('CREATE CONSTRAINT IF NOT EXISTS FOR (i:Interest) REQUIRE i.id IS UNIQUE');
     
     // Performance Indexes
-    await session.run('CREATE INDEX FOR (p:Place) ON (p.cityId)');
-    await session.run('CREATE INDEX FOR (p:Place) ON (p.rating)');
+    await session.run('CREATE INDEX IF NOT EXISTS FOR (p:Place) ON (p.cityId)');
+    await session.run('CREATE INDEX IF NOT EXISTS FOR (p:Place) ON (p.rating)');
 
     const cities = [
       { id: 'mumbai', name: 'Mumbai', country: 'India' },
@@ -28,7 +28,10 @@ async function seed() {
       { id: 'paris', name: 'Paris', country: 'France' },
       { id: 'london', name: 'London', country: 'UK' },
       { id: 'rome', name: 'Rome', country: 'Italy' },
-      { id: 'nyc', name: 'New York', country: 'USA' }
+      { id: 'nyc', name: 'New York', country: 'USA' },
+      { id: 'goa', name: 'Goa', country: 'India' },
+      { id: 'bihar', name: 'Bihar', country: 'India' },
+      { id: 'uttarakhand', name: 'Uttarakhand', country: 'India' }
     ];
 
     const interests = ['Art', 'History', 'Food', 'Architecture', 'Photography', 'Nature', 'Shopping', 'Nightlife', 'Museums', 'Culture', 'Romance', 'Religion', 'Technology'];
@@ -81,7 +84,22 @@ async function seed() {
       { id: 'central_park', name: 'Central Park', cityId: 'nyc', rating: 4.8, description: 'Urban park in New York City.', visitDuration: 180, priceLevel: 1, interests: ['Nature', 'Photography', 'Romance'] },
       { id: 'statue_of_liberty', name: 'Statue of Liberty', cityId: 'nyc', rating: 4.7, description: 'Colossal neoclassical sculpture on Liberty Island.', visitDuration: 240, priceLevel: 2, interests: ['History', 'Architecture'] },
       { id: 'met_museum', name: 'The Metropolitan Museum of Art', cityId: 'nyc', rating: 4.9, description: 'The largest art museum in the Americas.', visitDuration: 240, priceLevel: 2, interests: ['Art', 'Museums', 'History'] },
-      { id: 'times_square', name: 'Times Square', cityId: 'nyc', rating: 4.6, description: 'Major commercial intersection and tourist destination.', visitDuration: 90, priceLevel: 1, interests: ['Nightlife', 'Photography', 'Culture', 'Shopping'] }
+      { id: 'times_square', name: 'Times Square', cityId: 'nyc', rating: 4.6, description: 'Major commercial intersection and tourist destination.', visitDuration: 90, priceLevel: 1, interests: ['Nightlife', 'Photography', 'Culture', 'Shopping'] },
+      
+      // Goa
+      { id: 'baga_beach', name: 'Baga Beach', cityId: 'goa', rating: 4.5, description: 'Popular beach known for its nightlife and water sports.', visitDuration: 240, priceLevel: 2, interests: ['Nature', 'Nightlife', 'Food', 'Culture'] },
+      { id: 'basilica_bom_jesus', name: 'Basilica of Bom Jesus', cityId: 'goa', rating: 4.8, description: 'UNESCO World Heritage site holding the mortal remains of St. Francis Xavier.', visitDuration: 120, priceLevel: 1, interests: ['History', 'Architecture', 'Religion'] },
+      { id: 'dudhsagar_falls', name: 'Dudhsagar Falls', cityId: 'goa', rating: 4.7, description: 'Four-tiered waterfall located on the Mandovi River.', visitDuration: 300, priceLevel: 1, interests: ['Nature', 'Photography'] },
+
+      // Bihar
+      { id: 'mahabodhi_temple', name: 'Mahabodhi Temple', cityId: 'bihar', rating: 4.9, description: 'Ancient Buddhist temple in Bodh Gaya, UNESCO World Heritage site.', visitDuration: 180, priceLevel: 1, interests: ['History', 'Religion', 'Culture', 'Architecture'] },
+      { id: 'nalanda_university', name: 'Nalanda University Ruins', cityId: 'bihar', rating: 4.8, description: 'Ruins of the ancient center of learning.', visitDuration: 240, priceLevel: 1, interests: ['History', 'Culture', 'Photography'] },
+      { id: 'vishnupad_temple', name: 'Vishnupad Temple', cityId: 'bihar', rating: 4.6, description: 'Ancient temple in Gaya dedicated to Lord Vishnu.', visitDuration: 120, priceLevel: 1, interests: ['Religion', 'History', 'Culture'] },
+
+      // Uttarakhand
+      { id: 'badrinath_temple', name: 'Badrinath Temple', cityId: 'uttarakhand', rating: 4.9, description: 'A Hindu temple dedicated to Lord Vishnu, part of the Char Dham pilgrimage.', visitDuration: 180, priceLevel: 1, interests: ['Religion', 'History', 'Culture', 'Nature'] },
+      { id: 'valley_of_flowers', name: 'Valley of Flowers', cityId: 'uttarakhand', rating: 4.9, description: 'National park known for its meadows of endemic alpine flowers.', visitDuration: 480, priceLevel: 1, interests: ['Nature', 'Photography'] },
+      { id: 'naini_lake', name: 'Naini Lake', cityId: 'uttarakhand', rating: 4.7, description: 'A natural freshwater lake situated amidst the town of Nainital.', visitDuration: 150, priceLevel: 2, interests: ['Nature', 'Romance', 'Photography'] }
     ];
 
     console.log(`Creating ${cities.length} cities...`);
@@ -161,6 +179,14 @@ async function seed() {
       { start: 'times_square', end: 'central_park', distanceMinutes: 15 },
       { start: 'met_museum', end: 'central_park', distanceMinutes: 10 },
       { start: 'times_square', end: 'met_museum', distanceMinutes: 25 },
+      // Goa
+      { start: 'baga_beach', end: 'basilica_bom_jesus', distanceMinutes: 45 },
+      { start: 'basilica_bom_jesus', end: 'dudhsagar_falls', distanceMinutes: 90 },
+      // Bihar
+      { start: 'mahabodhi_temple', end: 'vishnupad_temple', distanceMinutes: 30 },
+      { start: 'mahabodhi_temple', end: 'nalanda_university', distanceMinutes: 150 },
+      // Uttarakhand
+      { start: 'naini_lake', end: 'badrinath_temple', distanceMinutes: 360 }
     ];
 
     for (const rel of nearRels) {

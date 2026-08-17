@@ -1,67 +1,92 @@
 # TravelGraph
 
-**Product vision**: Tell us what you love. We'll find the places that connect.
+TravelGraph is a full-stack Next.js web application backed by a Neo4j Graph Database (hosted on CognoDB). It intelligently generates personalized travel itineraries by combining user interests and geographic proximity.
 
-A graph-powered travel planner that recommends attractions and builds efficient day itineraries based on a user's interests, location, proximity, and available time.
+## 🎯 The Use Case & Why a Graph Database?
 
-## Overview
+**The Problem:**
+When planning a trip, tourists want an itinerary that maximizes the number of places they enjoy (based on their interests) while minimizing travel time between locations.
+In a traditional relational database (SQL), querying for "Find me museums with high ratings that are geographically close to each other, and compute an efficient path between them" requires extremely complex, expensive, and non-performant `JOIN`s, spatial queries, and recursive CTEs.
 
-TravelGraph uses a connected graph model to provide a seamless travel recommendation experience. Traditional relational databases represent places as isolated listings; TravelGraph uses Neo4j to model the complex web of relationships between cities, attractions, user interests, and real-world geography (distance/travel time). This allows for multi-hop discovery and intelligent itinerary generation.
+**Why a Graph Database (Neo4j)?**
+Graph databases inherently treat relationships as first-class citizens. By modeling cities, attractions, and their physical distances as interconnected nodes and relationships, finding an optimal travel path becomes a simple graph traversal. 
+- **Interest Matching:** We easily find places with shared interests by traversing the `(Place)-[:HAS_TAG]->(Interest)` relationships.
+- **Geographic Routing:** Finding the next closest stop in an itinerary is just a matter of traversing `(Place)-[r:NEAR]->(NextPlace)` and ordering by `r.distanceMinutes`.
 
-## Features
-- **Destination & Interest Selection**: Choose a city and tell us what you love.
-- **Graph-Powered Recommendations**: Real-time matching using Neo4j Cypher queries.
-- **Multi-Hop Discovery**: Find out exactly *why* a place was recommended based on shared connections.
-- **Nearby & Related Attractions**: Explore connections based on geography (`NEAR` relationships) or shared tags (`HAS_TAG`).
-- **Itinerary Builder**: Generate a full day's plan logically ordered by travel time and rating.
+Graph databases allow us to perform multi-hop traversals (e.g., finding a path of 4 attractions) in milliseconds.
 
-## Why a Graph Database?
-Travel recommendations are fundamentally about connected entities. Finding an itinerary that starts at the Louvre, takes you somewhere nearby with a high rating, and ensures both places match your interests requires multi-hop traversal. While achievable in relational databases through complex JOINs, a graph database represents these connections natively. Cypher queries make multi-hop traversal an intuitive operation, matching the way we naturally think about travel routes.
+## 🏗️ Data Model
 
-## Architecture & Tech Stack
-- **Frontend/Backend**: Next.js (App Router), React, TypeScript
-- **Styling**: Tailwind CSS
-- **Database**: Neo4j (CognoDB representation)
-- **Driver**: Official `neo4j-driver`
+```mermaid
+graph TD
+    City[City Node] -->|CONTAINS| Place[Place Node]
+    Place -->|LOCATED_IN| City
+    Place -->|HAS_TAG| Interest[Interest Node]
+    Place -->|NEAR distanceMinutes| Place
+```
 
-### Graph Schema
-- `(User)-[:LIKES]->(Interest)`
-- `(User)-[:VISITED]->(Place)`
-- `(City)-[:CONTAINS]->(Place)`
-- `(Place)-[:HAS_TAG]->(Interest)`
-- `(Place)-[:HAS_CATEGORY]->(Category)`
-- `(Place)-[:NEAR {distanceMinutes}]->(Place)`
-- `(Place)-[:LOCATED_IN]->(City)`
+- **Nodes:** `City`, `Place`, `Interest`
+- **Relationships:** `CONTAINS`, `LOCATED_IN`, `HAS_TAG`, `NEAR`
+- **Properties:**
+  - `Place`: `rating`, `description`, `visitDuration`, `priceLevel`
+  - `NEAR`: `distanceMinutes`
 
-## Setup Instructions
+## ⚙️ Setup & Run Instructions
 
-1. **Install Dependencies**
-   ```bash
-   npm install
-   ```
+### 1. Configure the Environment
+Ensure you have a CognoDB instance running. Create a `.env.local` file in the root of the project:
+```env
+COGNODB_URI="neo4j+s://<your-instance>.databases.cognodb.com"
+COGNODB_USERNAME="cognodb"
+COGNODB_PASSWORD="<your-password>"
+```
 
-2. **Environment Variables**
-   Copy `.env.example` to `.env.local` and add your Neo4j credentials:
-   ```
-   COGNODB_URI=bolt+s://<instance-id>.databases.cognodb.cloud
-   COGNODB_USERNAME=cognodb
-   COGNODB_PASSWORD=<your-password>
-   ```
+### 2. Install Dependencies
+```bash
+npm install
+```
 
-   **How to get these credentials**:
-   1. Go to [https://console.cognodb.com/signup](https://console.cognodb.com/signup) and create a free account.
-   2. Create a free (c0) instance.
-   3. Copy your unique `bolt+s://` URI and the generated password for the `cognodb` user.
+### 3. Seed the Database
+Run the provided seed script to populate the graph with global cities (including Mumbai, Delhi, Tokyo, Paris, Goa, Bihar, and Uttarakhand) and establish their `NEAR` relationships.
+```bash
+npx tsx scripts/seed.ts
+```
 
-3. **Seed Database**
-   Run the seed script to populate cities, interests, places, and relationships:
-   ```bash
-   npx tsx scripts/seed.ts
-   ```
+### 4. Run the Development Server
+```bash
+npm run dev
+```
+Navigate to `http://localhost:3000` to start exploring!
 
-4. **Run Development Server**
-   ```bash
-   npm run dev
-   ```
+## 🔍 Main Cypher Queries Explained
 
-Visit `http://localhost:3000` to start planning.
+### 1. Generating Recommendations (Interest Matching)
+```cypher
+MATCH (c:City {id: $cityId})<-[:LOCATED_IN]-(p:Place)-[:HAS_TAG]->(i:Interest)
+WHERE i.name IN $interests
+WITH p, count(i) as matchedInterests
+ORDER BY matchedInterests DESC, p.rating DESC
+RETURN p, matchedInterests
+```
+**Explanation:** This query starts at the selected City, finds all Places within it, and traverses out to their `Interest` tags. It filters for tags the user selected, counts how many matches each place has, and returns them sorted by relevance and rating.
+
+### 2. Multi-Hop Itinerary Generation (2+ Hops)
+```cypher
+MATCH (start:Place {id: $startPlaceId})-[r:NEAR]->(next:Place)
+WHERE next.rating >= $minimumRating
+RETURN next, r.distanceMinutes as travelTime
+ORDER BY r.distanceMinutes ASC
+LIMIT 5
+```
+**Explanation:** This query traverses from a starting attraction across the `NEAR` geographic relationship to discover adjacent attractions. It filters for high-quality places, and sorts by travel time to find the most efficient next step in a walking itinerary. In a real application, this is iteratively traversed to build a continuous path.
+
+## 📸 Screenshots
+
+*(Candidate note: Replace these placeholders with actual screenshots of your application before submitting)*
+- `![Landing Page](./screenshot_1.png)`
+- `![Itinerary Page](./screenshot_2.png)`
+
+## 🌐 Hosted Demo
+
+- **Live URL:** `[Insert Vercel Link Here]`
+- **Demo Video:** `[Insert Loom Link Here]`

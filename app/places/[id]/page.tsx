@@ -5,6 +5,7 @@ import { MapPin, Clock, Star, ArrowLeft, Tag } from 'lucide-react';
 
 export default async function PlaceDetailsPage({
   params,
+  searchParams,
 }: {
   params: { id: string };
   searchParams: { duration?: string };
@@ -52,109 +53,141 @@ export default async function PlaceDetailsPage({
 
   return (
     <div className="min-h-screen bg-neutral-50 pb-20">
-      <header className="bg-white border-b border-neutral-200 px-6 py-4 sticky top-0 z-10">
-        <div className="mx-auto max-w-5xl flex items-center justify-between">
-          <Link href="/recommendations" className="flex items-center text-sm font-medium text-neutral-600 hover:text-neutral-900 transition-colors">
-            <ArrowLeft className="h-4 w-4 mr-2" /> Back
-          </Link>
-          <div className="font-bold text-xl tracking-tight text-neutral-950">
-            TravelGraph
+      
+      {/* Hero Image Section */}
+      <div className="relative w-full h-[50vh] min-h-[400px]">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img 
+          src={`https://picsum.photos/seed/${id}/1920/1080`} 
+          alt={place.name} 
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black/80" />
+        
+        {/* Header over image */}
+        <header className="absolute top-0 left-0 right-0 px-6 py-4 z-10">
+          <div className="mx-auto max-w-7xl flex items-center justify-between">
+            <Link href="/recommendations" className="flex items-center text-sm font-medium text-white hover:text-neutral-200 transition-colors">
+              <ArrowLeft className="h-4 w-4 mr-2" /> Back to results
+            </Link>
+            <div className="flex gap-4">
+               <button className="text-white hover:text-neutral-200"><Star className="h-5 w-5" /></button>
+            </div>
           </div>
-        </div>
-      </header>
-
-      <main className="mx-auto max-w-5xl px-6 py-12">
-        {/* Main Place Info */}
-        <div className="bg-white rounded-3xl p-8 sm:p-12 shadow-sm ring-1 ring-neutral-200/50 mb-12 relative overflow-hidden">
-          <div className="absolute top-0 right-0 p-8 opacity-5 pointer-events-none">
-            <MapPin className="w-64 h-64" />
-          </div>
-          
-          <div className="relative z-10 flex flex-col md:flex-row md:items-start justify-between gap-8">
-            <div className="flex-1">
-              <h1 className="text-4xl sm:text-5xl font-extrabold text-neutral-950 tracking-tight mb-4">{place.name}</h1>
-              <p className="text-lg text-neutral-600 leading-relaxed max-w-2xl">{place.description}</p>
-              
-              <div className="mt-8 flex flex-wrap gap-4">
-                <div className="flex items-center gap-2 rounded-full bg-amber-50 px-4 py-2 text-sm font-medium text-amber-700 ring-1 ring-inset ring-amber-600/20">
-                  <Star className="h-4 w-4 fill-amber-500 text-amber-500" />
-                  {place.rating} / 5.0 Rating
-                </div>
-                {place.visitDuration && (
-                  <div className="flex items-center gap-2 rounded-full bg-blue-50 px-4 py-2 text-sm font-medium text-blue-700 ring-1 ring-inset ring-blue-600/20">
-                    <Clock className="h-4 w-4 text-blue-500" />
-                    {Math.round(place.visitDuration / 60)}h Recommended Visit
+        </header>
+        
+        {/* Hero Content */}
+        <div className="absolute bottom-0 left-0 right-0 px-6 pb-12 z-10">
+          <div className="mx-auto max-w-7xl flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div>
+              <h1 className="text-4xl md:text-6xl font-extrabold text-white tracking-tight mb-4">{place.name}</h1>
+              <div className="flex items-center gap-4 text-white">
+                {place.rating && (
+                  <div className="flex items-center gap-1.5 font-medium">
+                    <Star className="h-5 w-5 fill-amber-500 text-amber-500" />
+                    <span className="text-lg">{place.rating}</span>
+                    <span className="text-neutral-300 font-normal">(24,500 reviews)</span>
+                  </div>
+                )}
+                {place.cityId && (
+                  <div className="flex items-center gap-1.5 text-neutral-300">
+                     <MapPin className="h-4 w-4" />
+                     {place.cityId.charAt(0).toUpperCase() + place.cityId.slice(1)}
                   </div>
                 )}
               </div>
-
-              <div className="mt-8 space-y-3">
-                <h3 className="text-sm font-semibold uppercase tracking-wider text-neutral-500 flex items-center gap-2">
-                  <Tag className="h-4 w-4" /> Categories & Interests
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {place.tags?.map((tag: string) => (
-                    <span key={tag} className="inline-flex items-center rounded-lg bg-neutral-100 px-3 py-1.5 text-sm font-medium text-neutral-700">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
             </div>
             
-            <div className="flex flex-col gap-4 min-w-[240px]">
+            <div className="min-w-[200px]">
               <form action={`/itinerary`} method="GET">
                 <input type="hidden" name="startPlaceId" value={place.id} />
                 <input type="hidden" name="duration" value={duration} />
-                <button type="submit" className="w-full flex items-center justify-center rounded-xl bg-blue-600 px-6 py-4 text-base font-bold text-white shadow-sm transition-all hover:bg-blue-700 hover:shadow-md hover:-translate-y-0.5">
-                  Build My Day From Here
+                <button type="submit" className="w-full flex items-center justify-center rounded-2xl bg-indigo-600 px-8 py-4 text-base font-bold text-white shadow-lg shadow-indigo-600/30 transition-all hover:bg-indigo-700 hover:-translate-y-0.5">
+                  Add to Itinerary
                 </button>
               </form>
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Graph Connections */}
-        <div className="space-y-16">
+      <main className="mx-auto max-w-7xl px-6 py-12 grid grid-cols-1 lg:grid-cols-3 gap-12">
+        {/* Main Place Info (Left Column) */}
+        <div className="lg:col-span-2 space-y-12">
+          
+          <section>
+            <h2 className="text-2xl font-bold text-neutral-900 mb-4">About</h2>
+            <p className="text-lg text-neutral-600 leading-relaxed">{place.description}</p>
+            <div className="mt-6 flex flex-wrap gap-2">
+              {place.tags?.map((tag: string) => (
+                <span key={tag} className="inline-flex items-center rounded-full bg-indigo-50 px-4 py-2 text-sm font-semibold text-indigo-700">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </section>
+
+          <section className="bg-white rounded-3xl p-8 border border-neutral-200">
+            <h3 className="text-lg font-bold text-neutral-900 mb-6">Why we recommend it</h3>
+            <ul className="space-y-4">
+              <li className="flex items-start gap-4">
+                <div className="bg-emerald-100 p-2 rounded-full mt-0.5">
+                   <Star className="h-4 w-4 text-emerald-600" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-neutral-900">Matches your interests</h4>
+                  <p className="text-sm text-neutral-500">This place heavily matches your selected categories.</p>
+                </div>
+              </li>
+              <li className="flex items-start gap-4">
+                <div className="bg-amber-100 p-2 rounded-full mt-0.5">
+                   <Star className="h-4 w-4 text-amber-600 fill-amber-600" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-neutral-900">Highly rated</h4>
+                  <p className="text-sm text-neutral-500">Loved by thousands of travelers on TravelGraph.</p>
+                </div>
+              </li>
+              {place.visitDuration && (
+                <li className="flex items-start gap-4">
+                  <div className="bg-blue-100 p-2 rounded-full mt-0.5">
+                    <Clock className="h-4 w-4 text-blue-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-neutral-900">Perfect for your trip</h4>
+                    <p className="text-sm text-neutral-500">The ~{Math.round(place.visitDuration / 60)}h recommended visit time fits perfectly in your schedule.</p>
+                  </div>
+                </li>
+              )}
+            </ul>
+          </section>
+
+        </div>
+
+        {/* Sidebar (Right Column) */}
+        <div className="space-y-8">
           {place.nearby && place.nearby.length > 0 && (
             <section>
-              <h2 className="text-2xl font-bold text-neutral-900 mb-6 flex items-center gap-2">
-                <MapPin className="h-6 w-6 text-blue-500" /> Nearby Places
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <h2 className="text-xl font-bold text-neutral-900 mb-6">Nearby Places</h2>
+              <div className="flex flex-col gap-4">
                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                 {place.nearby.map((nearbyPlace: any) => (
-                  <PlaceCard
+                  <Link 
+                    href={`/places/${nearbyPlace.id}`} 
                     key={nearbyPlace.id}
-                    id={nearbyPlace.id}
-                    name={nearbyPlace.name}
-                    rating={nearbyPlace.rating}
-                    description={nearbyPlace.description}
-                    distanceMinutes={nearbyPlace.distanceMinutes}
-                    actionText="View Place"
-                  />
-                ))}
-              </div>
-            </section>
-          )}
-
-          {place.related && place.related.length > 0 && (
-            <section>
-              <h2 className="text-2xl font-bold text-neutral-900 mb-6 flex items-center gap-2">
-                <Star className="h-6 w-6 text-purple-500" /> Similar Interests
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                {place.related.map((relatedPlace: any) => (
-                  <PlaceCard
-                    key={relatedPlace.id}
-                    id={relatedPlace.id}
-                    name={relatedPlace.name}
-                    rating={relatedPlace.rating}
-                    description={relatedPlace.description}
-                    matchedInterests={relatedPlace.sharedInterests}
-                    actionText="View Place"
-                  />
+                    className="flex gap-4 p-4 rounded-2xl bg-white border border-neutral-100 hover:border-indigo-200 hover:shadow-md transition-all group"
+                  >
+                    <div className="w-20 h-20 rounded-xl overflow-hidden shrink-0 bg-neutral-100">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={`https://picsum.photos/seed/${nearbyPlace.id}/200/200`} alt={nearbyPlace.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform" />
+                    </div>
+                    <div className="flex flex-col justify-center">
+                      <h4 className="font-bold text-neutral-900 text-sm line-clamp-1">{nearbyPlace.name}</h4>
+                      <div className="text-xs text-neutral-500 mt-1 flex items-center gap-1">
+                        <MapPin className="h-3 w-3" /> {nearbyPlace.distanceMinutes} min walk
+                      </div>
+                    </div>
+                  </Link>
                 ))}
               </div>
             </section>

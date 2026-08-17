@@ -1,6 +1,6 @@
 import { generateItinerary } from '../../lib/itinerary';
 import Link from 'next/link';
-import { MapPin, Clock, ArrowLeft, Navigation } from 'lucide-react';
+import { MapPin, Clock, ArrowLeft, Navigation, Star } from 'lucide-react';
 
 export default async function ItineraryPage({
   searchParams,
@@ -73,46 +73,63 @@ export default async function ItineraryPage({
 
       <main className="mx-auto max-w-3xl px-6 py-12">
         <div className="mb-12 text-center">
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-neutral-900 mb-4">Your Generated Day</h1>
+          <h1 className="text-4xl font-extrabold text-neutral-900 mb-4">Your Generated Day</h1>
           <p className="text-neutral-500 text-lg">Optimized for travel time and ratings using Graph traversal.</p>
         </div>
 
-        <div className="space-y-6">
+        <div className="space-y-0 pl-4 sm:pl-12">
           {itinerary.map((stop, index) => (
-            <div key={stop.place.id} className="relative flex gap-6">
+            <div key={stop.place.id} className="relative flex gap-8">
               {/* Timeline Connector */}
               <div className="flex flex-col items-center">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 text-white shadow-md ring-4 ring-white z-10">
-                  <MapPin className="h-5 w-5" />
+                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-indigo-100 ring-4 ring-white z-10 mt-6">
+                  <div className="h-2 w-2 rounded-full bg-indigo-600" />
                 </div>
                 {index < itinerary!.length - 1 && (
-                  <div className="w-0.5 h-full bg-neutral-200 min-h-[4rem]" />
+                  <div className="w-[2px] h-full bg-neutral-200 mt-2" />
                 )}
               </div>
               
-              <div className="flex-1 pb-8">
-                {stop.travelTimeFromPrevious > 0 && (
-                  <div className="mb-4 inline-flex items-center rounded-lg bg-neutral-100 px-3 py-1.5 text-sm font-medium text-neutral-600 ring-1 ring-inset ring-neutral-200">
-                    <Navigation className="h-4 w-4 mr-2 text-neutral-400" />
-                    {stop.travelTimeFromPrevious} min travel time
-                  </div>
-                )}
-                
+              <div className="flex-1 pb-10">
                 <Link href={`/places/${stop.place.id}`} className="block group">
-                  <div className="bg-white rounded-2xl p-6 shadow-sm ring-1 ring-neutral-200 transition-all hover:shadow-md hover:ring-neutral-300">
-                    <h3 className="text-xl font-bold text-neutral-900 group-hover:text-blue-600 transition-colors">{stop.place.name}</h3>
-                    <p className="mt-2 text-neutral-500 line-clamp-2">{stop.place.description}</p>
+                  <div className="flex items-start gap-4">
+                    <div className="w-24 h-24 rounded-2xl overflow-hidden shrink-0 bg-neutral-100 shadow-sm ring-1 ring-neutral-200 group-hover:shadow-md transition-all">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={`https://picsum.photos/seed/${stop.place.id}/300/300`} alt={stop.place.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform" />
+                    </div>
                     
-                    <div className="mt-4 flex flex-wrap gap-4 text-sm font-medium text-neutral-600">
-                      {stop.place.visitDuration && (
-                        <div className="flex items-center gap-1">
-                          <Clock className="h-4 w-4 text-neutral-400" />
-                          {Math.round(stop.place.visitDuration / 60)}h visit
+                    <div className="pt-2">
+                      <h3 className="text-xl font-bold text-neutral-900 group-hover:text-indigo-600 transition-colors line-clamp-1">{stop.place.name}</h3>
+                      
+                      <div className="mt-2 flex flex-col gap-1 text-sm font-medium text-neutral-500">
+                        {stop.place.visitDuration && (
+                          <div className="flex items-center gap-1.5">
+                            <Clock className="h-4 w-4 text-neutral-400" />
+                            {Math.round(stop.place.visitDuration / 60)} hours
+                          </div>
+                        )}
+                        <div className="flex items-center gap-1.5 mt-1">
+                          <Star className="h-4 w-4 text-amber-500 fill-amber-500" />
+                          {stop.place.rating} ({stop.place.interests?.join(', ') || 'Landmark'})
                         </div>
-                      )}
+                      </div>
                     </div>
                   </div>
                 </Link>
+                
+                {stop.travelTimeFromPrevious > 0 && index < itinerary!.length - 1 && (
+                  <div className="mt-6 -ml-[2.25rem] inline-flex items-center rounded-full bg-white px-3 py-1.5 text-xs font-bold text-neutral-500 ring-1 ring-inset ring-neutral-200 shadow-sm relative z-20">
+                    <Navigation className="h-3 w-3 mr-1.5 text-neutral-400" />
+                    {stop.travelTimeFromPrevious} min walk
+                  </div>
+                )}
+                
+                {stop.travelTimeFromPrevious > 0 && index === 0 && (
+                   <div className="mt-6 mb-2 inline-flex items-center rounded-full bg-white px-3 py-1.5 text-xs font-bold text-neutral-500 ring-1 ring-inset ring-neutral-200 shadow-sm relative z-20 -translate-x-[2.25rem]">
+                    <Navigation className="h-3 w-3 mr-1.5 text-neutral-400" />
+                    {stop.travelTimeFromPrevious} min walk to start
+                  </div>
+                )}
               </div>
             </div>
           ))}
