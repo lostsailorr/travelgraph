@@ -1,6 +1,7 @@
 import { generateItinerary } from '../../lib/itinerary';
 import Link from 'next/link';
-import { Clock, ArrowLeft, Navigation, Star } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
+import { InteractiveItinerary } from '../../components/InteractiveItinerary';
 
 export default async function ItineraryPage({
   searchParams,
@@ -77,63 +78,7 @@ export default async function ItineraryPage({
           <p className="text-neutral-500 text-lg">Optimized for travel time and ratings using Graph traversal.</p>
         </div>
 
-        <div className="space-y-0 pl-4 sm:pl-12">
-          {itinerary.map((stop, index) => (
-            <div key={stop.place.id} className="relative flex gap-8">
-              {/* Timeline Connector */}
-              <div className="flex flex-col items-center">
-                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-indigo-100 ring-4 ring-white z-10 mt-6">
-                  <div className="h-2 w-2 rounded-full bg-indigo-600" />
-                </div>
-                {index < itinerary!.length - 1 && (
-                  <div className="w-[2px] h-full bg-neutral-200 mt-2" />
-                )}
-              </div>
-              
-              <div className="flex-1 pb-10">
-                <Link href={`/places/${stop.place.id}`} className="block group">
-                  <div className="flex items-start gap-4">
-                    <div className="w-24 h-24 rounded-2xl overflow-hidden shrink-0 bg-neutral-100 shadow-sm ring-1 ring-neutral-200 group-hover:shadow-md transition-all">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={`https://picsum.photos/seed/${stop.place.id}/300/300`} alt={stop.place.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform" />
-                    </div>
-                    
-                    <div className="pt-2">
-                      <h3 className="text-xl font-bold text-neutral-900 group-hover:text-indigo-600 transition-colors line-clamp-1">{stop.place.name}</h3>
-                      
-                      <div className="mt-2 flex flex-col gap-1 text-sm font-medium text-neutral-500">
-                        {stop.place.visitDuration && (
-                          <div className="flex items-center gap-1.5">
-                            <Clock className="h-4 w-4 text-neutral-400" />
-                            {Math.round(stop.place.visitDuration / 60)} hours
-                          </div>
-                        )}
-                        <div className="flex items-center gap-1.5 mt-1">
-                          <Star className="h-4 w-4 text-amber-500 fill-amber-500" />
-                          {stop.place.rating} ({stop.place.interests?.join(', ') || 'Landmark'})
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-                
-                {stop.travelTimeFromPrevious > 0 && index < itinerary!.length - 1 && (
-                  <div className="mt-6 -ml-[2.25rem] inline-flex items-center rounded-full bg-white px-3 py-1.5 text-xs font-bold text-neutral-500 ring-1 ring-inset ring-neutral-200 shadow-sm relative z-20">
-                    <Navigation className="h-3 w-3 mr-1.5 text-neutral-400" />
-                    {stop.travelTimeFromPrevious} min walk
-                  </div>
-                )}
-                
-                {stop.travelTimeFromPrevious > 0 && index === 0 && (
-                   <div className="mt-6 mb-2 inline-flex items-center rounded-full bg-white px-3 py-1.5 text-xs font-bold text-neutral-500 ring-1 ring-inset ring-neutral-200 shadow-sm relative z-20 -translate-x-[2.25rem]">
-                    <Navigation className="h-3 w-3 mr-1.5 text-neutral-400" />
-                    {stop.travelTimeFromPrevious} min walk to start
-                  </div>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
+        <InteractiveItinerary initialItinerary={itinerary} />
         
         <div className="mt-12 flex justify-center">
           <Link href="/plan" className="inline-flex items-center justify-center rounded-xl bg-neutral-900 px-8 py-4 text-base font-bold text-white shadow-sm transition-all hover:bg-neutral-800">

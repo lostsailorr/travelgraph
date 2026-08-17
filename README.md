@@ -88,10 +88,9 @@ LIMIT 5
 ## 📸 Screenshots
 
 *(Candidate note: Replace these placeholders with actual screenshots of your application before submitting)*
-- `![Landing Page](./screenshot_1.png)`
-- `![Itinerary Page](./screenshot_2.png)`
+![alt text](image.png)
 
 ## 🌐 Hosted Demo
 
-- **Live URL:** `[Insert Vercel Link Here]`
-- **Demo Video:** `[Insert Loom Link Here]`
+- **Live URL:** `[https://travelgraph-lbxc.vercel.app]`
+
