@@ -41,7 +41,13 @@ export const getPlaceDetails = cache(async (placeId: string) => {
     const placeQuery = `MATCH (p:Place {id: $placeId}) RETURN p`;
     const placeResult = await session.run(placeQuery, { placeId });
     if (placeResult.records.length === 0) return null;
-    const place = placeResult.records[0].get('p').properties;
+    const rawPlace = placeResult.records[0].get('p').properties;
+    const place = {
+      ...rawPlace,
+      visitDuration: safeNumber(rawPlace.visitDuration),
+      rating: safeNumber(rawPlace.rating),
+      priceLevel: safeNumber(rawPlace.priceLevel)
+    };
 
     // Nearby places
     const nearbyQuery = readCypher('nearby.cypher');
