@@ -98,13 +98,12 @@ export default async function PlaceDetailsPage({
             </div>
             
             <div className="min-w-[200px]">
-              <form action={`/itinerary`} method="GET">
-                <input type="hidden" name="startPlaceId" value={place.id} />
-                <input type="hidden" name="duration" value={duration} />
-                <button type="submit" className="w-full flex items-center justify-center rounded-2xl bg-indigo-600 px-8 py-4 text-base font-bold text-white shadow-lg shadow-indigo-600/30 transition-all hover:bg-indigo-700 hover:-translate-y-0.5">
-                  Add to Itinerary
-                </button>
-              </form>
+              <Link 
+                href={`/itinerary?startPlaceId=${place.id}&duration=${duration}`}
+                className="w-full flex items-center justify-center rounded-2xl bg-indigo-600 px-8 py-4 text-base font-bold text-white shadow-lg shadow-indigo-600/30 transition-all hover:bg-indigo-700 hover:-translate-y-0.5"
+              >
+                Add to Itinerary
+              </Link>
             </div>
           </div>
         </div>
