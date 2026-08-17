@@ -77,7 +77,6 @@ export default async function RecommendationsPage({
                 id={place.id}
                 name={place.name}
                 rating={place.rating}
-                description={place.description}
                 matchedInterests={place.matchedInterests}
                 duration={duration}
                 tags={place.interests}
