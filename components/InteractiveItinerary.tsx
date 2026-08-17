@@ -1,12 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Clock, Navigation, Star, Trash2 } from 'lucide-react';
+import { Clock, Navigation, Star, Trash2, Bookmark, Check } from 'lucide-react';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function InteractiveItinerary({ initialItinerary }: { initialItinerary: any[] }) {
+export function InteractiveItinerary({ initialItinerary, isSavedView = false, tripId = '' }: { initialItinerary: any[], isSavedView?: boolean, tripId?: string }) {
   const [itinerary, setItinerary] = useState(initialItinerary);
+  const [saved, setSaved] = useState(isSavedView);
 
   const removePlace = (indexToRemove: number) => {
     setItinerary(prev => {
@@ -25,6 +26,38 @@ export function InteractiveItinerary({ initialItinerary }: { initialItinerary: a
       newItin.splice(indexToRemove, 1);
       return newItin;
     });
+  };
+
+  const handleSave = () => {
+    if (itinerary.length === 0) return;
+    try {
+      const existing = JSON.parse(localStorage.getItem('travelgraph_saved_trips') || '[]');
+      
+      if (isSavedView && tripId) {
+        // Update existing
+        const index = existing.findIndex((t: any) => t.id === tripId);
+        if (index >= 0) {
+          existing[index].itinerary = itinerary;
+          existing[index].updatedAt = Date.now();
+        }
+      } else {
+        // Create new
+        const newTrip = {
+          id: Date.now().toString(),
+          createdAt: Date.now(),
+          startPlace: itinerary[0].place.name,
+          cityId: itinerary[0].place.cityId,
+          itinerary: itinerary
+        };
+        existing.push(newTrip);
+      }
+      
+      localStorage.setItem('travelgraph_saved_trips', JSON.stringify(existing));
+      setSaved(true);
+      setTimeout(() => { if(!isSavedView) setSaved(false); }, 3000); // Reset after 3s if not in saved view
+    } catch (e) {
+      console.error('Failed to save trip', e);
+    }
   };
 
   if (itinerary.length === 0) {
@@ -107,6 +140,21 @@ export function InteractiveItinerary({ initialItinerary }: { initialItinerary: a
           </div>
         </div>
       ))}
+
+      <div className="mt-12 flex justify-center gap-4">
+        {(!isSavedView || saved) && (
+          <button 
+            onClick={handleSave}
+            disabled={saved && !isSavedView}
+            className={`inline-flex items-center justify-center rounded-xl px-8 py-4 text-base font-bold text-white shadow-sm transition-all ${
+              saved ? 'bg-emerald-600 hover:bg-emerald-700' : 'bg-indigo-600 hover:bg-indigo-700'
+            }`}
+          >
+            {saved && !isSavedView ? <Check className="w-5 h-5 mr-2" /> : <Bookmark className="w-5 h-5 mr-2" />}
+            {saved ? (isSavedView ? 'Update Saved Trip' : 'Trip Saved!') : 'Save Trip'}
+          </button>
+        )}
+      </div>
     </div>
   );
 }
