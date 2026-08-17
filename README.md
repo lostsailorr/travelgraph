@@ -33,26 +33,31 @@ graph TD
 
 ## ⚙️ Setup & Run Instructions
 
-### 1. Configure the Environment
-Ensure you have a CognoDB instance running. Create a `.env.local` file in the root of the project:
+### 1. Create a CognoDB Instance
+1. Go to [CognoDB.com](https://cognodb.com) and sign up for a free account.
+2. Click **Create New Database** and choose the free tier.
+3. Once provisioned, navigate to the **Connection Settings** tab to retrieve your URI, Username, and Password.
+
+### 2. Configure the Environment
+Create a `.env.local` file in the root of the project and paste your CognoDB credentials:
 ```env
 COGNODB_URI="neo4j+s://<your-instance>.databases.cognodb.com"
 COGNODB_USERNAME="cognodb"
 COGNODB_PASSWORD="<your-password>"
 ```
 
-### 2. Install Dependencies
+### 3. Install Dependencies
 ```bash
 npm install
 ```
 
-### 3. Seed the Database
+### 4. Seed the Database
 Run the provided seed script to populate the graph with global cities (including Mumbai, Delhi, Tokyo, Paris, Goa, Bihar, and Uttarakhand) and establish their `NEAR` relationships.
 ```bash
 npx tsx scripts/seed.ts
 ```
 
-### 4. Run the Development Server
+### 5. Run the Development Server
 ```bash
 npm run dev
 ```
