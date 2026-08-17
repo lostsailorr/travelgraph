@@ -26,19 +26,19 @@ export default function Home() {
           </div>
           
           <nav className="hidden lg:flex items-center gap-10">
-            <Link href="#" className="text-sm font-bold text-neutral-900 border-b-2 border-indigo-600 pb-1">Explore</Link>
-            <Link href="#" className="text-sm font-medium text-neutral-600 hover:text-neutral-900 transition-colors">Itinerary</Link>
-            <Link href="#" className="text-sm font-medium text-neutral-600 hover:text-neutral-900 transition-colors">Saved Trips</Link>
-            <Link href="#" className="text-sm font-medium text-neutral-600 hover:text-neutral-900 transition-colors">About</Link>
+            <Link href="/plan" className="text-sm font-bold text-neutral-900 border-b-2 border-indigo-600 pb-1">Explore</Link>
+            <Link href="/plan" className="text-sm font-medium text-neutral-600 hover:text-neutral-900 transition-colors">Itinerary</Link>
+            <Link href="/plan" className="text-sm font-medium text-neutral-600 hover:text-neutral-900 transition-colors">Saved Trips</Link>
+            <Link href="/plan" className="text-sm font-medium text-neutral-600 hover:text-neutral-900 transition-colors">About</Link>
           </nav>
           
           <div className="flex items-center gap-6">
-            <button className="hidden sm:flex items-center gap-2 text-sm font-medium text-neutral-600 hover:text-neutral-900">
+            <Link href="/plan" className="hidden sm:flex items-center gap-2 text-sm font-medium text-neutral-600 hover:text-neutral-900">
               <Globe className="w-4 h-4" /> English
-            </button>
-            <button className="text-neutral-600 hover:text-neutral-900">
+            </Link>
+            <Link href="/plan" className="text-neutral-600 hover:text-neutral-900">
               <Heart className="w-5 h-5" />
-            </button>
+            </Link>
             <Link href="/plan" className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-lg font-bold text-sm transition-colors shadow-md shadow-indigo-600/20">
               Get Started
             </Link>
@@ -72,9 +72,9 @@ export default function Home() {
               <Link href="/plan" className="w-full sm:w-auto flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-lg shadow-indigo-600/30 hover:-translate-y-0.5">
                 <Navigation className="w-5 h-5" /> Start Planning <ChevronRight className="w-5 h-5" />
               </Link>
-              <button className="w-full sm:w-auto flex items-center justify-center gap-2 bg-white hover:bg-neutral-50 text-neutral-900 px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-md">
+              <a href="#features" className="w-full sm:w-auto flex items-center justify-center gap-2 bg-white hover:bg-neutral-50 text-neutral-900 px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-md">
                 <Play className="w-5 h-5" /> See How It Works
-              </button>
+              </a>
             </div>
 
             <div className="flex items-center gap-4">
@@ -96,7 +96,7 @@ export default function Home() {
       </section>
 
       {/* Floating Features Bar */}
-      <section className="relative z-20 max-w-[1400px] mx-auto px-8 -mt-24 mb-20 w-full">
+      <section id="features" className="relative z-20 max-w-[1400px] mx-auto px-8 -mt-24 mb-20 w-full">
         <div className="bg-white rounded-3xl shadow-xl ring-1 ring-neutral-200/50 p-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 divide-y md:divide-y-0 md:divide-x divide-neutral-100">
             <div className="flex gap-4 lg:px-6 first:pl-0 last:pr-0">
