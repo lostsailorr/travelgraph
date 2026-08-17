@@ -1,8 +1,8 @@
 'use client';
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { InterestSelector } from './InterestSelector';
-import { MapPin, Calendar, Search, Clock, ChevronRight } from 'lucide-react';
+import { Search, Clock, ChevronRight } from 'lucide-react';
 
 const CITIES = [
   { id: 'mumbai', name: 'Mumbai', country: 'India', img: 'mumbai' },

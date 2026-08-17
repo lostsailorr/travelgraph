@@ -5,7 +5,6 @@ interface PlaceCardProps {
   id: string;
   name: string;
   rating?: number;
-  description?: string;
   tags?: string[];
   matchedInterests?: number;
   distanceMinutes?: number;
@@ -19,7 +18,6 @@ export function PlaceCard({
   id, 
   name, 
   rating, 
-  description, 
   tags = [], 
   matchedInterests, 
   distanceMinutes, 

@@ -1,6 +1,6 @@
 import { generateItinerary } from '../../lib/itinerary';
 import Link from 'next/link';
-import { MapPin, Clock, ArrowLeft, Navigation, Star } from 'lucide-react';
+import { Clock, ArrowLeft, Navigation, Star } from 'lucide-react';
 
 export default async function ItineraryPage({
   searchParams,

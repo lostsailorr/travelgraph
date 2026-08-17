@@ -1,7 +1,6 @@
 import { getPlaceDetails } from '../../../lib/recommendations';
-import { PlaceCard } from '../../../components/PlaceCard';
 import Link from 'next/link';
-import { MapPin, Clock, Star, ArrowLeft, Tag } from 'lucide-react';
+import { MapPin, Clock, Star, ArrowLeft } from 'lucide-react';
 
 export default async function PlaceDetailsPage({
   params,

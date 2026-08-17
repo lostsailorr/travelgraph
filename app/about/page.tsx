@@ -36,7 +36,7 @@ export default function AboutPage() {
                 When planning a trip, tourists want an itinerary that maximizes the number of places they enjoy (based on their interests) while minimizing travel time between locations.
               </p>
               <p>
-                In a traditional relational database (SQL), querying for "Find me museums with high ratings that are geographically close to each other, and compute an efficient path between them" requires extremely complex, expensive, and non-performant <code className="bg-neutral-100 px-1.5 py-0.5 rounded">JOIN</code>s, spatial queries, and recursive CTEs.
+                In a traditional relational database (SQL), querying for &quot;Find me museums with high ratings that are geographically close to each other, and compute an efficient path between them&quot; requires extremely complex, expensive, and non-performant <code className="bg-neutral-100 px-1.5 py-0.5 rounded">JOIN</code>s, spatial queries, and recursive CTEs.
               </p>
               <p>
                 By modeling cities, attractions, and their physical distances as interconnected nodes and relationships, finding an optimal travel path becomes a simple graph traversal. We easily find places with shared interests by traversing the <code className="bg-indigo-50 text-indigo-700 px-1.5 py-0.5 rounded font-mono text-sm">(Place)-[:HAS_TAG]-&gt;(Interest)</code> relationships.
